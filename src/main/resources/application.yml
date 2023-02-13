@@ -1,0 +1,18 @@
+spring:
+  jpa:    database: mysql
+    hibernate:      ddl-auto: update
+  datasource:    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/apitesting
+    username: root
+    password: root
+    properties:
+      hibernate:
+        search:
+          default:
+            indexmanager: elasticsearch
+            elasticsearch:
+              host: localhost
+              index_schema_management_strategy: drop-and-create
+              required_index_status: yellow
+server:  port: 8091
+  
