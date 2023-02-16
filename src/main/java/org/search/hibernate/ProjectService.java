@@ -12,8 +12,6 @@ import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
 public class ProjectService {
 
@@ -27,12 +25,12 @@ public class ProjectService {
 	}
 
 	public List<Project> findAll() {
-//		try {
-//			initiateIndexing();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+			initiateIndexing();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return projectRepository.findAll();
 	}
 
@@ -41,9 +39,9 @@ public class ProjectService {
 
 		QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Project.class).get();
 
-		Query foodQuery = qb.keyword().wildcard().onFields("projectName", "organization", "team_id", "project_description").matching(word+ "*").createQuery();
+		Query projectQuery = qb.keyword().wildcard().onFields("projectName", "organization", "team_id", "project_description").matching(word+ "*").createQuery();
 
-		FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(foodQuery, Project.class);
+		FullTextQuery fullTextQuery = fullTextEntityManager.createFullTextQuery(projectQuery, Project.class);
 		return (List<Project>) fullTextQuery.getResultList();
 	}
 

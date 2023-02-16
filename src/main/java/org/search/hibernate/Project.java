@@ -1,12 +1,21 @@
 package org.search.hibernate;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.TermVector;
+import org.search.hibernate.suite.TestSuite;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Indexed(index = "idx_project")
@@ -30,6 +39,11 @@ public class Project {
 
 	@Field(termVector = TermVector.YES)
 	private String uuid;
+
+	@OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+	@JsonIgnoreProperties("testSuite")
+	@IndexedEmbedded(depth = 2)
+	private Set<TestSuite> testSuites = new HashSet<>();
 
 	public Long getId() {
 		return Id;
@@ -78,5 +92,15 @@ public class Project {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
+
+	public Set<TestSuite> getTestSuites() {
+		return testSuites;
+	}
+
+	public void setTestSuites(Set<TestSuite> testSuites) {
+		this.testSuites = testSuites;
+	}
+	
+	
 
 }

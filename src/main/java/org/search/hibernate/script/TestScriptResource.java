@@ -2,7 +2,8 @@ package org.search.hibernate.script;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import org.search.hibernate.suite.TestSuite;
+import org.search.hibernate.suite.TestSuiteService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestScriptResource {
 
 	private final TestScriptService testScriptService;
+	private final  TestSuiteService testSuiteService;
+	
 
-	public TestScriptResource(TestScriptService testScriptService) {
+	public TestScriptResource(TestScriptService testScriptService, TestSuiteService testSuiteService) {
 		this.testScriptService = testScriptService;
+		this.testSuiteService = testSuiteService;
 	}
 
 	@RequestMapping(value = "/test-scripts", method = RequestMethod.GET, produces = { "application/json" })
@@ -41,6 +45,11 @@ public class TestScriptResource {
 	@RequestMapping(value = "/testsCreated", method = RequestMethod.GET)
 	public @ResponseBody void testsCreated(@RequestParam String email) {
 		testScriptService.testsCreated(email);
+	}
+	
+	@RequestMapping(value = "/test-suites", method = RequestMethod.GET, produces = { "application/json" })
+	public @ResponseBody List<TestSuite> findAllSuites() {
+		return testSuiteService.findAll();
 	}
 }
 

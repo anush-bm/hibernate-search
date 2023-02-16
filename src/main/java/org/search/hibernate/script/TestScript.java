@@ -1,11 +1,13 @@
 package org.search.hibernate.script;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
@@ -19,6 +21,9 @@ import org.hibernate.search.annotations.Parameter;
 import org.hibernate.search.annotations.TermVector;
 import org.hibernate.search.annotations.TokenFilterDef;
 import org.hibernate.search.annotations.TokenizerDef;
+import org.search.hibernate.suite.TestSuite;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Indexed(index = "idx_testscript")
@@ -59,6 +64,11 @@ public class TestScript {
 	
 	@Field(termVector = TermVector.YES)
 	private String sequence_id;
+	
+	@JsonIgnore
+	@IndexedEmbedded(indexNullAs = "No suite", depth = 1)
+	@ManyToMany
+	private Set<TestSuite> testSuite=new HashSet<TestSuite>();
 	
 	public Long getId() {
 		return Id;
@@ -130,6 +140,14 @@ public class TestScript {
 
 	public void setSequence_id(String sequence_id) {
 		this.sequence_id = sequence_id;
+	}
+	
+	public Set<TestSuite> getTestSuite() {
+		return testSuite;
+	}
+
+	public void setTestSuite(Set<TestSuite> testSuite) {
+		this.testSuite = testSuite;
 	}
 
 	@Override
